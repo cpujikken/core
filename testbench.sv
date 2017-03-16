@@ -26,9 +26,11 @@ module testbench;
   logic finished;
   logic in,out;
   logic[19:0] test;
-  receiver ins1(clk,in,data,finished);
-  sender ins2(clk,data,finished,out);
+  logic[7:0] mm[1024];
+  logic reading;
+  receiver ins1(clk,in,reading,finished,mm);
   integer i;
+
   initial begin
     $display("START\n");
     clk<=0;
@@ -41,18 +43,19 @@ repeat(100) begin
     clk<=!clk;
 end
 
+    reading<=1'b1;
     for(i=0;i<80;++i) begin
       if(i<20) in<=test[i];
       else in<=1;
-
 
       repeat(5208) begin
 #5ns
         clk <= !clk;
       end
-      $displayb(data);
+
     end
-    $displayb(data);
+          $displayb(data[0]);
+          $displayb(data[1]);
     $finish;
   end
 endmodule
